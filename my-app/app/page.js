@@ -15,8 +15,11 @@ export default function Home() {
         <div className="title">Plan. Learn. Achieve</div>
         <div className="content">Stay organized and make the most of your study time with LearnSphere. Effortlessly schedule your tasks, track progress, and stay ahead in your academic journey. Your smart study planner, designed for success!</div>
       </div>
+
+      <div className="button-center blue-btn">
+        <Link href={"/Feature"}><button className="button-33" role="button">Start Planning</button></Link>
+      </div>
       
-      <Link href={"/Feature"}><button className="button-33" role="button">Start Planning</button></Link>
 
       <div className="box">
         <div className="cards">

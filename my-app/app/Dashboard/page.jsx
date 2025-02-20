@@ -62,10 +62,10 @@ export default function Dashboard() {
     <div className="dashboard">
 
       {/* Render StudyPlan only if predictionData is not null */}
-      {predictionData && <StudyPlan data={predictionData} />}
+      {predictionData ? <StudyPlan data={predictionData} /> : <p>Generating study plan...</p>}
 
       {/* Chat Button */}
-      <div className="chat-icon" onClick={() => setIsChatOpen(!isChatOpen)}>💬</div>
+      <div className="chat-icon" onClick={() => setIsChatOpen(!isChatOpen)}>Chat now💬</div>
 
       {/* Chat Window */}
       {isChatOpen && (

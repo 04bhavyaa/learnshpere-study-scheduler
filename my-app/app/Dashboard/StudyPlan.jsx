@@ -1,105 +1,80 @@
 import React from "react";
-import "./StudyPlan.css";
-import "bootstrap/dist/css/bootstrap.min.css";
+import "./StudyPlan.css"; // Import the updated CSS
 
 const StudyPlan = ({ data }) => {
-  if (!data || !data.study_plan || !data.study_plan.studyPlan)
-    return <p className="text-center">Loading...</p>;
+  if (!data || !data.study_plan) {
+    return <p>Loading study plan...</p>;
+  }
 
-  const { aiLearningTips, dailySchedule, progressTrackingSystem, studyResources } =
-    data.study_plan.studyPlan;
+  // Handle cases where study_plan might be nested
+  const studyPlan = data.study_plan.studyPlan || data.study_plan.study_plan || {};
 
   return (
-    <div className="study-plan container">
-      <h1 className="text-center my-4">Study Plan Overview</h1>
-
-      {/* AI Learning Tips */}
-      <div className="card mb-3">
-        <div className="card-body">
-          <h2 className="card-title">AI Learning Tips</h2>
-          <ul className="list-group">
-            {aiLearningTips.map((tip, index) => (
-              <li key={index} className="list-group-item">
-                {tip}
-              </li>
-            ))}
-          </ul>
-        </div>
-      </div>
-
-      {/* Daily Schedule */}
-      <div className="card mb-3">
-        <div className="card-body">
-          <h2 className="card-title">Daily Schedule</h2>
-          {Object.entries(dailySchedule).map(([day, subjects]) => (
-            <div key={day} className="day-schedule">
-              <h3>{day.charAt(0).toUpperCase() + day.slice(1)}</h3>
-              <ul className="list-group">
-                {Object.entries(subjects).map(([subject, time]) => (
-                  <li key={subject} className="list-group-item">
-                    <strong>{subject}:</strong> {time}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      {/* Progress Tracking */}
-      <div className="card mb-3">
-        <div className="card-body">
-          <h2 className="card-title">Progress Tracking</h2>
-          <div className="progress-container">
-            {progressTrackingSystem.completionBar.map((task, index) => (
-              <div key={index} className="progress-item">
-                <strong>{task.taskName}:</strong>
-                <div className="progress mb-2">
-                  <div
-                    className="progress-bar bg-success"
-                    role="progressbar"
-                    style={{ width: `${task.progress}%` }}
-                  ></div>
-                </div>
-              </div>
-            ))}
+    <div className="study-plan-container">
+      <h1 className="title">Study Plan</h1>
+      <div className="plan_grid">
+        {Object.entries(studyPlan).map(([key, value], index) => (
+          <div className="glass-card" key={index}>
+            <h2>{formatKey(key)}</h2>
+            <div className="card-content">{renderContent(value)}</div>
           </div>
-        </div>
-      </div>
-
-      {/* To-Do List */}
-      <div className="card mb-3">
-        <div className="card-body">
-          <h2 className="card-title">To-Do List</h2>
-          <ul className="list-group">
-            {progressTrackingSystem.todoList.map((item, index) => (
-              <li key={index} className="list-group-item">
-                <strong>{item.taskName}:</strong> Due {item.dueDate}
-              </li>
-            ))}
-          </ul>
-        </div>
-      </div>
-
-      {/* Study Resources */}
-      <div className="card mb-3">
-        <div className="card-body">
-          <h2 className="card-title">Study Resources</h2>
-          <ul className="list-group">
-            {studyResources.map((resource, index) => (
-              <li key={index} className="list-group-item">
-                <strong>{resource.resourceName}:</strong> {resource.description} (
-                <a href={resource.url} target="_blank" rel="noopener noreferrer">
-                  Link
-                </a>
-                )
-              </li>
-            ))}
-          </ul>
-        </div>
+        ))}
       </div>
     </div>
   );
+};
+
+// Function to format keys into readable titles
+const formatKey = (key) => {
+  return key.replace(/_/g, " ").replace(/\b\w/g, (char) => char.toUpperCase());
+};
+
+// Function to render dynamic content
+const renderContent = (content) => {
+  if (Array.isArray(content)) {
+    return (
+      <ul className="subject-list">
+        {content.map((item, idx) =>
+          typeof item === "object" ? (
+            <li key={idx}>
+              {Object.entries(item).map(([subKey, subValue]) => (
+                <div key={subKey}>
+                  <strong>{formatKey(subKey)}:</strong> {subValue}
+                </div>
+              ))}
+            </li>
+          ) : (
+            <li key={idx}>{item}</li>
+          )
+        )}
+      </ul>
+    );
+  } else if (typeof content === "object") {
+    return (
+      <>
+        {Object.entries(content).map(([subKey, subValue]) => (
+          <div key={subKey}>
+            <strong>{formatKey(subKey)}:</strong>{" "}
+            {typeof subValue === "object" ? renderContent(subValue) : subValue}
+            {subKey === "completion_bar" &&
+              Array.isArray(subValue) &&
+              subValue.map((progress, i) => (
+                <div className="progress" key={i}>
+                  <div
+                    className="progress-bar"
+                    style={{ width: `${progress.progress}%` }}
+                  >
+                    {progress.progress}%
+                  </div>
+                </div>
+              ))}
+          </div>
+        ))}
+      </>
+    );
+  } else {
+    return <span>{content}</span>;
+  }
 };
 
 export default StudyPlan;

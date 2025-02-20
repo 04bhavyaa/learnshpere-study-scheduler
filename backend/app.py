@@ -26,9 +26,12 @@ def performance():
     return predict_performance(data)
 
 @app.route('/study_plan', methods=['POST'])
-def study_plan():
-    data = request.get_json()
-    return generate_study_plan(data)
+def generate_plan_route():
+    data = request.get_json()  # Get JSON data from the request body
+    if data:
+        return generate_study_plan(data)
+    else:
+        return jsonify({"error": "No data provided"}), 400
 
 @app.route('/studyplan', methods=['POST'])
 def studyplan():
