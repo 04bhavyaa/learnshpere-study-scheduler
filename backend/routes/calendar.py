@@ -1,15 +1,15 @@
-from flask import Blueprint, request, jsonify
+from flask import request, jsonify
 from google.oauth2 import service_account
 from googleapiclient.discovery import build
 import datetime
 import os
-import json
-
-# Blueprint for Calendar Routes
-calendar_bp = Blueprint("calendar", __name__)
 
 # Google Calendar API Setup
-SERVICE_ACCOUNT_FILE = "credentials.json"  # Your service account JSON file
+
+SERVICE_ACCOUNT_FILE = "credential.json"
+if not os.path.exists(SERVICE_ACCOUNT_FILE):
+    print("Error: credentials.json not found at", os.path.abspath(SERVICE_ACCOUNT_FILE))
+
 SCOPES = ["https://www.googleapis.com/auth/calendar"]
 
 # Load credentials
@@ -23,7 +23,6 @@ service = build("calendar", "v3", credentials=credentials)
 # Your Google Calendar ID (Primary or Custom)
 CALENDAR_ID = os.getenv("GOOGLE_CALENDAR_ID", "primary")
 
-
 def create_event(subject, start_time, end_time, description="Study Session"):
     """Create an event in Google Calendar."""
     event = {
@@ -35,8 +34,6 @@ def create_event(subject, start_time, end_time, description="Study Session"):
     event = service.events().insert(calendarId=CALENDAR_ID, body=event).execute()
     return event
 
-
-@calendar_bp.route("/add_schedule", methods=["POST"])
 def add_study_schedule():
     """Add study plan sessions to Google Calendar."""
     try:
@@ -66,8 +63,6 @@ def add_study_schedule():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
-
-@calendar_bp.route("/get_schedule", methods=["GET"])
 def get_study_schedule():
     """Retrieve upcoming study sessions from Google Calendar."""
     try:

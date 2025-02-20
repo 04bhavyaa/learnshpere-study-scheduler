@@ -7,15 +7,11 @@ from flask import Blueprint, request, jsonify
 # Load the trained model
 study_predictor = load_model("artifacts/study_predictor.pkl")
 
-# create blueprint
-predictions_bp = Blueprint("predictions", __name__)
-
-@predictions_bp.route("/predict_performance", methods=["POST"])
 def predict_performance(data):
     try:
         features = np.array([
-            data["gender"], data["education"], data["subject_mapping"], 
-            data["absence_mapping"]
+            data["gender"], data["education"], data["subject"], 
+            data["absence"], data["satisfaction"]
         ]).reshape(1, -1)
         
         prediction = study_predictor.predict(features)[0]

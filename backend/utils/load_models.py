@@ -1,7 +1,5 @@
 import pickle
 
-def load_model(model_path):
-    with open(model_path, "rb") as file:
-        model = pickle.load(file)
-    return model
-
+def load_model(filepath):
+    with open(filepath, 'rb') as file:
+        return pickle.load(file)

@@ -1,31 +1,51 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
-import os
-import pickle
-from dotenv import load_dotenv
-
-# Import routes
-from routes.chatbot import chatbot_bp
-from routes.study_plan import study_plan_bp
-from routes.calendar import calendar_bp
-from routes.predictions import predictions_bp
-
-# Load environment variables
-load_dotenv()
+from routes.score_prediction import predict_score
+from routes.performance_prediction import predict_performance
+from routes.study_plan import generate_study_plan
+from routes.chatbot import ai_chatbot  # Import updated chatbot
+#from routes.calendar import add_study_schedule, get_study_schedule
 
 app = Flask(__name__)
-CORS(app)  # Enable Cross-Origin Resource Sharing (for frontend integration)
+CORS(app)  # Enable CORS for all routes
 
-# Register Blueprints (Modular Routes)
-app.register_blueprint(chatbot_bp, url_prefix="/chatbot")
-app.register_blueprint(study_plan_bp, url_prefix="/study_plan")
-app.register_blueprint(calendar_bp, url_prefix="/calendar")
-app.register_blueprint(predictions_bp, url_prefix="/predict")
-
-@app.route("/", methods=["GET"])
+@app.route('/')
 def home():
-    """Root route to check API status."""
-    return jsonify({"message": "Study Assistant API is running!"}), 200
+    return jsonify({"message": "Welcome to the AI Study Assistant API!"})
 
-if __name__ == "__main__":
+@app.route('/predict', methods=['POST']) 
+def predict(): 
+    input_data = request.get_json()
+    if not input_data: 
+        return jsonify({"error": "No input data provided"}), 400 
+    return predict_score(input_data)
+
+@app.route('/performance', methods=['POST'])
+def performance():
+    data = request.json
+    return predict_performance(data)
+
+@app.route('/study_plan', methods=['POST'])
+def study_plan():
+    data = request.get_json()
+    return generate_study_plan(data)
+
+@app.route('/studyplan', methods=['POST'])
+def studyplan():
+    data = request.get_json()
+    return generate_study_plan(data)
+
+@app.route('/chatbot', methods=['POST'])
+def chatbot():
+    return ai_chatbot()
+
+@app.route('/calendar/add', methods=['POST'])
+def add_calendar_event():
+    return add_study_schedule()
+
+@app.route('/calendar/get', methods=['GET'])
+def get_calendar_events():
+    return get_study_schedule()
+
+if __name__ == '__main__':
     app.run(debug=True)

@@ -1,0 +1,33 @@
+{
+    "education_mapping": {
+        "Middle School": 0,
+        "Lower Level": 1,
+        "High School": 2
+    },
+    "absence_mapping": {
+        "less than 7": 0,
+        "more than 7": 1
+    },
+    "satisfaction_mapping": {
+        "Satisfied": 0,
+        "Unsatisfied": 1
+    },
+    "gender_mapping": {
+        "M": 0,
+        "F": 1
+    },
+    "subject_mapping": {
+        "IT": 0,
+        "French": 1,
+        "Arabic": 2,
+        "Science": 3,
+        "English": 4,
+        "Biology": 5,
+        "Spanish": 6,
+        "Chemistry": 7,
+        "Geology": 8,
+        "Quran": 9,
+        "Math": 10,
+        "History": 11
+    }
+}

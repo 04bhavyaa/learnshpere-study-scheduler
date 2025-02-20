@@ -9,9 +9,6 @@ from dotenv import load_dotenv
 # Load environment variables
 load_dotenv()
 
-# Create Blueprint for Chatbot
-chatbot_bp = Blueprint("chatbot", __name__)
-
 # Enable LangSmith Tracing
 os.environ["LANGSMITH_TRACING_V2"] = "true"
 os.environ["LANGSMITH_API_KEY"] = os.getenv("LANGSMITH_API_KEY")
@@ -31,17 +28,17 @@ prompt = ChatPromptTemplate.from_messages([
 # Define Conversation Chain
 chain = ConversationChain(llm=llm, memory=memory)
 
-@chatbot_bp.route("/ai_chatbot", methods=["POST"])
 def ai_chatbot():
     """Handles chatbot requests via API."""
     try:
-        data = request.json
-        query = data.get("query", "").strip()
-
+        data = request.get_json(force=True, silent=True)  # Ensure valid JSON
+        if not data or "query" not in data:
+            return jsonify({"error": "Invalid JSON input. Expected {'query': 'your message'}"}), 400
+        
+        query = data["query"].strip()
         if not query:
             return jsonify({"error": "Query cannot be empty"}), 400
 
-        # Run conversation with memory
         response = chain.run(query)
 
         return jsonify({"response": response})

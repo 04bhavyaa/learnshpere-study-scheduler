@@ -1,0 +1,36 @@
+.study-plan {
+    background: #f9f9f9;
+    padding: 20px;
+    border-radius: 10px;
+  }
+  
+  h1, h2 {
+    text-align: center;
+  }
+  
+  .day-schedule {
+    background: #fff;
+    padding: 10px;
+    border-left: 5px solid #3498db;
+    margin-bottom: 10px;
+    border-radius: 5px;
+  }
+  
+  .progress-item {
+    margin-bottom: 10px;
+  }
+  
+  .progress-bar {
+    transition: width 0.3s ease-in-out;
+  }
+  
+  .card {
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  @media (max-width: 768px) {
+    .study-plan {
+      width: 100%;
+    }
+  }
+  

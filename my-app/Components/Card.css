@@ -1,0 +1,29 @@
+.card-1 {
+    background: rgba(216, 214, 214, 0.267);
+    padding: 1.5rem;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1); /* Soft shadow */
+    border-radius: 20px;
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+    max-width: 350px;
+    text-align: center;
+    height: 250px;
+}
+
+.card-1:hover {
+    transform: translateY(-8px); /* Slight lift effect */
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15); /* Deeper shadow */
+}
+
+.card-heading {
+    font-size: 24px;
+    font-weight: 600;
+    color: #223d50;
+    margin-bottom: 10px;
+}
+
+.card-content {
+    font-size: 14px;
+    font-weight: 400;
+    color: #555;
+    line-height: 1.6;
+}

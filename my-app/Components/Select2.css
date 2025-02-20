@@ -1,0 +1,32 @@
+.select2-input {
+    width: 100%;
+    padding: 10px;
+    border-radius: 10px;
+    border: 1px solid #ccc;
+    cursor: pointer;
+    background: rgba(255, 255, 255, 0.6);
+    backdrop-filter: blur(10px);
+  }
+  
+  .select2-dropdown {
+    position: absolute;
+    width: 44%;
+    max-height: 200px;
+    overflow-y: auto;
+    background: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(15px);
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    z-index: 10;
+    margin-top: 5px;
+  }
+  
+  .select2-search {
+    width: 100%;
+    padding: 8px;
+    border: none;
+    border-bottom: 1px solid #ddd;
+    outline: none;
+    background: transparent;
+  }
+  
